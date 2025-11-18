@@ -83,8 +83,7 @@ xbps-alternatives --set bash
 
 xbps-install -y cinnamon cinnamon-control-center cinnamon-desktop cinnamon-translations
 xbps-install -y cinnamon-menus cinnamon-screensaver cinnamon-settings-daemon
-xbps-install -y compton picom gvfs yad
-xbps-install -y gvfs-smb gvfs-mtp gvfs-cdda
+xbps-install -y gvfs yad gvfs-smb gvfs-mtp gvfs-cdda
 
 # nemo installation packages
 
@@ -154,7 +153,7 @@ ln -s /etc/sv/ufw /var/service
 # Bluetooth
 # bluez bluez-alsa blueman
 # ln -s /etc/sv/bluetoothd /var/service
-echo bluez bluez-obex bluez-deprecated libspa-bluetooth \
+echo bluez blueman bluez-obex bluez-deprecated libspa-bluetooth \
 | xargs -n1 xbps-install -y
 ln -s /etc/sv/bluetoothd /etc/runit/runsvdir/default/bluetoothd
 usermod -G bluetooth -a root
@@ -470,13 +469,15 @@ cp /usr/share/applications/octoxbps-notifier.desktop  /root/.local/share/applica
 cd /root/.local/share/applications/
 sed -i 's/^Exec=/&run-as-spot /' octoxbps.desktop
 sed -i 's/^Exec=/&run-as-spot /' octoxbps-notifier.desktop
-# cp /root/.local/share/applications/octoxbps-notifier.desktop /etc/xdg/autostart/octoxbps-notifier.desktop
+cp /root/.local/share/applications/octoxbps-notifier.desktop /etc/xdg/autostart/octoxbps-notifier.desktop
+
+# Start polkit-gnome-authentication-agent
+cp /usr/share/applications/polkit-gnome-authentication-agent-1.desktop /etc/xdg/autostart/polkit-gnome-authentication-agent-1.desktop
 
 # add sudo -spot to .desktop files run-as-spot
 cd /usr/share/applications
 sed -i 's/^Exec=/&sudo -uspot /' octoxbps.desktop
 sed -i 's/^Exec=/&sudo -uspot /' octoxbps-notifier.desktop
-cp /usr/share/applications/octoxbps-notifier.desktop /etc/xdg/autostart/octoxbps-notifier.desktop
 
 # Create nemo desktop launcher
 cat <<'EOF' >> /root/Startup/start_nemo_desktop
